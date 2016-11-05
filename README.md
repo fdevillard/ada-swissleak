@@ -35,44 +35,60 @@ with relationships as (using Cypher, the language used in Neo4j):
  
 ## Issues with the data
 
- The ICIJ data contains a lot of duplicates, but only a small part of which is connected by a "has a similar name or address" relatioship. Another issue is that the shareholder information is stored with the 
-
- We devide the project into two parts. A core part, which should be more feasible and should address essencial aspects of the network reveald by the leaks. A secondary part, which might be less straightforward to achieve, it is contingent on what we find along the way.
-
-## Links in Switzerland
-
-In order to reveal important and potentially fraudulent relations within and with Switzerland, we will focus on three main subgroups to be identified in the data:
-
- -  Names associated to big coorporations
- -  Politicians
- -  The super-rich
+ The ICIJ data contains a lot of duplicates, but only a small part of which is connected by a "has a similar name or address" relatioship. Another issue is that the shareholder information is stored with the "Officer", where the officer can be the share holder of any number of Companies. If the shareholder information would be stored in the "is officer of - Shareholer" relationship instead, we would remove the ambiguities in the shareholder information. [_source_](https://neo4j.com/blog/analyzing-panama-papers-neo4j/)
  
- In order to do so we will make use, not restricted to, of the following sources:
+## Extending the data - domain: Switzerland
+
+ There are several ways to extend and enrich the _Panama papers_ database. Unfortunately, we don't have access to big part of the data and metadata from the original leaks. On the other hand, one can look for other sources and makes cross checks in order to complement the information at hand. This task is part of our project.
+  
+ In this project, we will focus on Switzerland. Due to the public interest, it is an obvious move to cover at least two groups of entities withing Switzerland:
  
- - https://opencorporates.com/ 
- - https://www.parlament.ch/en/organe/national-council/members-national-council-a-z
- - https://www.parlament.ch/centers/documents/de/interessen-nr.pdf
+ * Politicians
+ * Coorporations
  
+ We have pre-scanned the web for sources on the above entities. For identifying and investigating links with swiss corporations, we will make use of
  
+ * [opencorporates](https://opencorporates.com/)
+     * The largest open database of companies in the world with 115.272.454 companies.
+     * Has an open API.
+ * [moneyhouse](https://www.moneyhouse.ch/)
+     * Has well structured data on a companie's
+         * Nominal capital
+         * board of directors
+         * managers 
+         * signatories
+     * More information can be purchased.
+  * [zefix](http://zefix.admin.ch/zfx-cgi/hrform.cgi/hraPage?alle_eintr=on&pers_sort=original&pers_num=0&language=4&col_width=366&amt=007)
+      * Similar information content as money house
+  * [wikipedia](https://en.wikipedia.org/wiki/List_of_Swiss_companies_by_revenue)
+      * List of biggest swiss companies by revenue
+      
+
+ We have also access to a list of former and active swiss politicians.
+          
+ * https://www.parlament.ch/en/organe/national-council/members-national-council-a-z
+ * https://www.parlament.ch/centers/documents/de/interessen-nr.pdf
  
-It is expected that these subgroups have intersections, which will naturally be highlighted. We will investigate links among people/companies based in Switzerland and those between elements outside Switzerland, whenever we consider it relevant.
-
-The main achievent here will be to reveal the networks in a similar fashion as it has been done in this example, for the Aliyev family in Azerbaijan: 
-
-![Aliyev Family Image](https://s3.amazonaws.com/dev.assets.neo4j.com/wp-content/uploads/20160408103432/azerbaijan-president-linkurious-fraud-ring.png)
-
-<img src="https://s3.amazonaws.com/dev.assets.neo4j.com/wp-content/uploads/20160408103432/azerbaijan-president-linkurious-fraud-ring.png" width=400>
-
-
-## Lobbying in Switzerland
-
-Politicians in Switzerland have to declare their relations with companies. This oficial information can be obtained in
+ Moreover, we have a list of their _declared interests_, in which they officially declare which companies they support (make this more precise/complete).
 
 - https://www.parlament.ch/centers/documents/de/interessen-nr.pdf
 - https://www.parlament.ch/centers/documents/de/interessen-sr.pdf
 
 at national and federal levels respectively.
 
+### Lobbying in Switzerland 
+ We would like to investigate this official statements and identify unnofical ones. We keep in mind that political campaigns in Switerland are privately funded.
+ 
+  
+It is expected that these subgroups have intersections, which will naturally be highlighted. We will investigate links among people/companies based in Switzerland and those between elements outside Switzerland, whenever we consider it relevant.
 
-We would like to investigate this official statments and identify unnofical ones. We keep in mind that political campaigns in Switerland are privately funded.
+On of the foreseeable achievements will be to reveal the networks in a similar fashion as it has been done in this example, for the Aliyev family in Azerbaijan: 
 
+<img src="https://s3.amazonaws.com/dev.assets.neo4j.com/wp-content/uploads/20160408103432/azerbaijan-president-linkurious-fraud-ring.png" width=500>
+
+
+
+
+## Extra: money flow
+
+-  The super-rich
