@@ -37,7 +37,8 @@ with relationships as (using Cypher, the language used in Neo4j):
 
  The ICIJ data contains a lot of duplicates, but only a small part of which is connected by a "has a similar name or address" relatioship. Another issue is that the shareholder information is stored with the "Officer", where the officer can be the share holder of any number of Companies. If the shareholder information would be stored in the "is officer of - Shareholer" relationship instead, we would remove the ambiguities in the shareholder information. [_source_](https://neo4j.com/blog/analyzing-panama-papers-neo4j/)
  
-## Extending the data - domain: Switzerland
+# III - Extending the data 
+## Domain: Switzerland
 
  There are several ways to extend and enrich the _Panama papers_ database. Unfortunately, we don't have access to big part of the data and metadata from the original leaks. On the other hand, one can look for other sources and makes cross checks in order to complement the information at hand. This task is part of our project.
   
@@ -63,7 +64,6 @@ with relationships as (using Cypher, the language used in Neo4j):
   * [wikipedia](https://en.wikipedia.org/wiki/List_of_Swiss_companies_by_revenue)
       * List of biggest swiss companies by revenue
       
-
  We have also access to a list of former and active swiss politicians.
           
  * https://www.parlament.ch/en/organe/national-council/members-national-council-a-z
@@ -75,6 +75,8 @@ with relationships as (using Cypher, the language used in Neo4j):
 - https://www.parlament.ch/centers/documents/de/interessen-sr.pdf
 
 at national and federal levels respectively.
+
+ The difficulty with the above information is that we have only found it in pdf format. 
 
 ### Lobbying in Switzerland 
  We would like to investigate this official statements and identify unnofical ones. We keep in mind that political campaigns in Switerland are privately funded.
