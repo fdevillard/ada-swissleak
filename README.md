@@ -1,5 +1,13 @@
 # The Panama Papers Project
-** TODO: Abstract **
+Using Swiss leaks and Panama paper with a focus on Switzerland. First part is a
+geographic timelaps over the Switzerland of different transactions linked with
+the Switzerland.
+
+From the data, the idea is to produce a map [like
+this](https://youtu.be/310-GYiitpM) but focused on Switzerland and with leaks
+data.
+
+Then, we'll take a focus on swiss politicians and big companies.
 
 # I - Introduction: The leaks
 
@@ -46,13 +54,10 @@ There are several ways to extend and enrich the _Panama papers_ database. Unfort
 In this project, we will focus on Switzerland. Due to the public interest, it is an obvious move to cover at least two groups of entities withing Switzerland:
  
  * Politicians
- * Coorporations
+ * Big coorporations
  
 We have pre-scanned the web for sources on the above entities. For identifying and investigating links with swiss corporations, we will make use of
  
- * [opencorporates](https://opencorporates.com/)
-     * The largest open database of companies in the world with 115.272.454 companies.
-     * Has an open API.
  * [moneyhouse](https://www.moneyhouse.ch/)
      * Has well structured data on a companie's
          * Nominal capital
@@ -60,6 +65,9 @@ We have pre-scanned the web for sources on the above entities. For identifying a
          * managers 
          * signatories
      * More information can be purchased. We're looking for an access.
+ * [opencorporates](https://opencorporates.com/)
+     * The largest open database of companies in the world with 115.272.454 companies.
+     * Has an open API.
   * [zefix](http://zefix.admin.ch/zfx-cgi/hrform.cgi/hraPage?alle_eintr=on&pers_sort=original&pers_num=0&language=4&col_width=366&amt=007)
       * Similar information content as money house
       * Has an API, but looks to be not well documented (and in German)
@@ -71,7 +79,7 @@ We have pre-scanned the web for sources on the above entities. For identifying a
  * https://www.parlament.ch/en/organe/national-council/members-national-council-a-z
  * https://www.parlament.ch/centers/documents/de/interessen-nr.pdf
  
- Moreover, we have a list of their _declared interests_, in which they officially declare which companies they support (make this more precise/complete).
+ Moreover, we have a list of their _declared interests_, in which they officially declare which companies they support.
 
 - https://www.parlament.ch/centers/documents/de/interessen-nr.pdf (National
   Council)
@@ -96,12 +104,13 @@ On of the foreseeable achievements will be to reveal the networks in a similar f
 <img src="https://s3.amazonaws.com/dev.assets.neo4j.com/wp-content/uploads/20160408103432/azerbaijan-president-linkurious-fraud-ring.png" width=500>
 
 
+# IV - Deliverables and timeplan
+Several deliverables:
 
+1. More precise check (Neo4j, Parlement website parsing for politician's data,
+MoneyHouse API access). Due 18th of November
+2. First midterm check of the timelapse. Due 2nd of December
+3. Finalize timelapse and data acquisition for politicians and big companies.
+Due 16th of December
+4. Timelapse with politicians and big companies. Due 30th of December. :)
 
-## Extra: money flow
-
--  The super-rich
-
-# IV - Deliverables
-
-# V - Timeplan
