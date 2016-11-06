@@ -114,3 +114,8 @@ MoneyHouse API access). Due 18th of November
 Due 16th of December
 4. Timelapse with politicians and big companies. Due 30th of December. :)
 
+# V - Liability
+Published information has been collected carefully but no guarantee about its
+completeness, correctness or up-to-date nature is given. No liability is
+accepted for damage or loss incurred from any information obtained in this
+repository.
