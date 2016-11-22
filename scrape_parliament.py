@@ -13,6 +13,7 @@ PERSON_URL = "https://ws.parlament.ch/OData.svc/Person(ID={},Language='EN')/?$fo
 INTERESTS_URL = "https://ws.parlament.ch/OData.svc/Person(ID={},Language='EN')/PersonInterests?$format=json"
 COUNCIL_HISTORIES_URL = "https://ws.parlament.ch/OData.svc/MemberCouncil(ID={},Language='EN')/MemberCouncilHistories?$format=json"
 
+#TODO Find party
 PERSON_FIELDS_TO_SAVE = (
     'DateOfBirth',
     'DateOFDeath',
@@ -86,7 +87,6 @@ def scrape_member(member_id):
         member_data["DateLeaving"] = max(leave_dates)
     else:
         member_data["DateLeaving"] = None
-
     return member_data
 
 def json_serial(obj):
