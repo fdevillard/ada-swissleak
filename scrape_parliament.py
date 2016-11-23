@@ -12,6 +12,7 @@ import requests
 PERSON_URL = "https://ws.parlament.ch/OData.svc/Person(ID={},Language='EN')/?$format=json"
 INTERESTS_URL = "https://ws.parlament.ch/OData.svc/Person(ID={},Language='EN')/PersonInterests?$format=json"
 COUNCIL_HISTORIES_URL = "https://ws.parlament.ch/OData.svc/MemberCouncil(ID={},Language='EN')/MemberCouncilHistories?$format=json"
+COUNCILS_URL = "https://ws.parlament.ch/OData.svc/Person(ID={},Language='EN')/MembersCouncil?$format=json"
 
 #TODO Find party
 PERSON_FIELDS_TO_SAVE = (
@@ -87,6 +88,15 @@ def scrape_member(member_id):
         member_data["DateLeaving"] = max(leave_dates)
     else:
         member_data["DateLeaving"] = None
+
+
+    # Get party
+
+    response = requests.get(COUNCILS_URL.format(member_id))
+    parsed_json = json.loads(response.content.decode("utf-8"))["d"]
+
+    member_data["Party"] = parsed_json.get("PartyName")
+
     return member_data
 
 def json_serial(obj):
@@ -100,7 +110,7 @@ def json_serial(obj):
 # Assume no member has an ID > 5000, which seems to be the case.
 # This avoids having to parse and scrape the list page per page
 
-for member_id in range(4102, 4103):
+for member_id in range(0, 5000):
     member = scrape_member(member_id)
     if member is not None:
         MEMBERS.append(member)
