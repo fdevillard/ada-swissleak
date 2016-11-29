@@ -1,6 +1,6 @@
 import time
 
-from lxml import html
+from lxml import html, etree
 import requests
 from selenium import webdriver
 from selenium.webdriver.common.by import By
@@ -109,8 +109,7 @@ SCRAPER_MAP = {
     #"hrcintapp": scrape_hrcintapp,
 }
 
-
-def zefix_search(name):
+def zefix_search_raw(name):
     """Returns first result from a Zefix search on `name`"""
     FORM = {
         "language": "2",
@@ -129,12 +128,21 @@ def zefix_search(name):
     FORM["name"] = name
 
     response = requests.post(SEARCH_URL, data=FORM)
-    tree = html.fromstring(response.content)
-
-    if "Le resultat de votre recherche est 0" in response.content:
+    
+    if "Le resultat de votre recherche est 0" in str(response.content):
         return None
+    
+    return response.content
 
-    result = []
+def zefix_search(name):
+    content = zefix_search_raw(name)
+    
+    if content is None:
+        return None
+    
+    tree = html.fromstring(content)
+    
+    result = {}
 
     # The returned HTML is broken, the <p> elements do not actually contain results,
     # as the DOM inspector would suggest.
@@ -166,4 +174,5 @@ def scrape_company(name):
 
     # return data 
 
-scrape_chregister("http://be.chregister.ch/cr-portal/auszug/auszug.xhtml?uid=CHE-110.398.897")
+if __name__=="__main__":
+    scrape_chregister("http://be.chregister.ch/cr-portal/auszug/auszug.xhtml?uid=CHE-110.398.897")
