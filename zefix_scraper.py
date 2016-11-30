@@ -1,6 +1,6 @@
 import time
 
-from lxml import html
+from lxml import html, etree
 import requests
 from selenium import webdriver
 from selenium.webdriver.common.by import By
@@ -10,6 +10,8 @@ from selenium.webdriver.support import expected_conditions as EC
 SEARCH_URL = "http://zefix.ch/WebServices/Zefix/Zefix.asmx/SearchFirm"
 
 TIMEOUT = 30
+
+CHREGISTER_MAX_TRIES = 10
 
 REGISTRIES = {
     'ag': 'http://ag.chregister.ch',
@@ -51,11 +53,25 @@ CHREGISTER_FORM = {
     "idPortalForm:auszugContentPanel_load": "true",
     "idPortalForm": "idPortalForm",
     "idPortalForm:idFvFirma_hinput": "",
-    "javax.faces.ViewState": "6314247452723873842:-7069064004931963664",
 }
 
-driver = webdriver.PhantomJS()
+CHREGISTER_HEADERS = {
+    "Host": "be.chregister.ch",
+    #"Cache-Control": "max-age=0",
+    "Faces-Request": "partial/ajax",
+    "Referer": "https://be.chregister.ch/cr-portal/auszug/auszug.xhtml?uid=CHE-110.398.897",
+    "Accept": "application/xml, text/xml, */*; q=0.01",
+    "Accept-Language": "en-US,en;q=0.8,fr;q=0.6,it;q=0.4",
+    "Pragma": "no-cache",
+    "Origin": "https://be.chregister.ch",
+    "User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_12_0) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/54.0.2840.98 Safari/537.36",
+    "X-Requested-With": "XMLHttpRequest"
+}
 
+# Dummy url to obtain another JSESSIONID
+CHREGISTER_RES_URL = "https://be.chregister.ch/cr-portal/javax.faces.resource/bootstrap/css/bootstrap.min.css.xhtml;jsessionid={}?ln=default"
+
+#driver = webdriver.PhantomJS()
 
 def scrape_chregister(url):
     data = {
@@ -63,45 +79,49 @@ def scrape_chregister(url):
         "companies": [],
     }
 
-    driver.get(url)
-    tree = html.fromstring(driver.page_source)
-    print("hey")
-    print(tree.xpath("//table[contains(@class, 'personen')]/tbody/tr"))
-    wait = WebDriverWait(driver, TIMEOUT)
-    # wait.until(
-    #     EC.invisibility_of_element_located((By.CSS_SELECTOR, ".ui-outputpanel-loading.ui-widget"))
-    # )
-    # try:
-    wait.until(
-        EC.visibility_of_any_elements_located((By.XPATH, "//table[contains(@class, 'personen')]/tbody/tr"))
-    )
-    # except:
-    #     print()
-    #     print(driver.page_source)
-    #     driver.quit()
-    #     return
-    print(EC.visibility_of_element_located((By.XPATH, "//table[contains(@class, 'personen')]/tbody/tr"))(driver))
-    print("k")
-    print(tree.xpath("//table[contains(@class, 'personen')]/tbody/tr"))
-    #time.sleep(3.0)
-    print("bye")
-    print(tree.xpath("//table[contains(@class, 'personen')]/tbody/tr"))
+    for i in range(0, CHREGISTER_MAX_TRIES):
+        response = requests.get(url)
+        #print(response.content)
+        JS1 = response.cookies.get("JSESSIONID")
 
-    for tr in tree.xpath("//table[contains(@class, 'personen')]/tbody/tr"):
-        item = {}
-        attribs = tr[3].attrib
-        item["cancelled"] = "class" in attribs and "strike" in attribs["class"]
-        item_line = tr[3].xpath("./text()")[-1].split(",")
-        if len(item_line) >= 3:
-            item["last_name"] = item_line[0].strip()
-            item["first_name"] = item_line[1].strip()
-            data["persons"].append(item)
-        else:
-            item["name"] = item_line[0].strip()
-            data["companies"].append(item)
-    if not data["persons"]:
-        return driver.page_source
-    return data
+        tree = html.fromstring(response.content)
+
+        #JS2 = requests.get(CHREGISTER_RES_URL.format(JS1)).cookies.get("JSESSIONID")
+
+        # This kind of a CSRF token, needed to make AJAX requests
+        viewstate = tree.xpath("//input[@id='j_id1:javax.faces.ViewState:0']/@value")[0]
+
+
+        form_data = CHREGISTER_FORM.copy()
+        form_data["javax.faces.ViewState"] = viewstate
+        r = requests.post(
+            "https://be.chregister.ch/cr-portal/auszug/auszug.xhtml;jsessionid={}".format(
+                JS1
+            ),
+            data=form_data,
+            headers=CHREGISTER_HEADERS,
+        ).content
+
+        if "table class" in r.decode("utf-8"):
+            partial_html = etree.fromstring(r).xpath("//update[@id='idPortalForm:auszugContentPanel']/text()")[0]
+            partial_tree = html.fromstring("<html>"+partial_html+"</html>")
+
+            for tr in partial_tree.xpath("//table[contains(@class, 'personen')]/tbody/tr"):
+                item = {}
+                attribs = tr[3].attrib
+                item["cancelled"] = "class" in attribs and "strike" in attribs["class"]
+                item_line = tr[3].xpath("./text()")[-1].split(",")
+                if len(item_line) >= 3:
+                    item["last_name"] = item_line[0].strip()
+                    item["first_name"] = item_line[1].strip()
+                    data["persons"].append(item)
+                else:
+                    item["name"] = item_line[0].strip()
+                    data["companies"].append(item)
+            return data
+
+    return None
+
 
 SCRAPER_MAP = {
     "chregister.ch": scrape_chregister,
@@ -164,6 +184,6 @@ def scrape_company(name):
 
     # call parser for relevant cantonal registry
 
-    # return data 
+    # return data
 
 scrape_chregister("http://be.chregister.ch/cr-portal/auszug/auszug.xhtml?uid=CHE-110.398.897")
