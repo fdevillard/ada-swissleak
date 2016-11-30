@@ -160,11 +160,24 @@ def scrape_powernet(url):
 
     return data
 
+def scrape_hrcintapp(url):
+    data = {
+        "persons": [],
+        "companies": [],
+    }
+
+    url = url.replace("externalCompanyReport", "companyReport")
+    tree = html.fromstring(requests.get(url).content)
+    data["id"] = tree.xpath("//table[3]/tr[2]/td[5]/text()")[0].strip()
+    data["company_name"] = tree.xpath("//table[4]/tr/td/table/tr[2]/td[2]/text()")[0].strip()
+
+
+
 
 SCRAPER_MAP = {
     "chregister.ch": scrape_chregister,
     "powernet.ch": scrape_powernet,
-    #"hrcintapp": scrape_hrcintapp,
+    "hrcintapp": scrape_hrcintapp,
 }
 
 
@@ -224,10 +237,10 @@ def scrape_company(name):
 
     # return data
 
-POWERNET_TESTS = [
-"http://ti.powernet.ch/webservices/inet/HRG/HRG.asmx/getHRGHTML?chnr=5003002002&amt=501&toBeModified=0&validOnly=0&lang=2&sort=0",
-"http://ti.powernet.ch/webservices/inet/HRG/HRG.asmx/getHRGHTML?chnr=5146025097&amt=501&toBeModified=0&validOnly=0&lang=2&sort=0",
+HRC_TESTS = [
+"https://www.rc2.vd.ch/registres/hrcintapp-pub/companyReport.action?companyOfrcId13=CH-550-1026964-4&ofrcLanguage=2",
+"https://www.rc2.vd.ch/registres/hrcintapp-pub/companyReport.action?companyOfrcId13=CH-550-1156917-1&ofrcLanguage=2"
 ]
 
-for t in POWERNET_TESTS:
-    print(scrape_powernet(t))
+for t in HRC_TESTS:
+    print(HRC_TESTS(t))
