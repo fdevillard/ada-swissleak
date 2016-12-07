@@ -1,11 +1,5 @@
-import time
-
 from lxml import html, etree
 import requests
-from selenium import webdriver
-from selenium.webdriver.common.by import By
-from selenium.webdriver.support.ui import WebDriverWait
-from selenium.webdriver.support import expected_conditions as EC
 
 SEARCH_URL = "http://zefix.ch/WebServices/Zefix/Zefix.asmx/SearchFirm"
 
@@ -171,7 +165,23 @@ def scrape_hrcintapp(url):
     data["id"] = tree.xpath("//table[3]/tr[2]/td[5]/text()")[0].strip()
     data["company_name"] = tree.xpath("//table[4]/tr/td/table/tr[2]/td[2]/text()")[0].strip()
 
+    person_rows = tree.xpath("//table[tr/th[contains(.,'ayant qualité pour signer')]]/tr[@bgcolor='#ffffff']/td[4]/span/text()")
 
+    for row in person_rows:
+        item = {}
+
+        #TODO factorize with chregister scraper
+        split = row.split(",")
+
+        if len(split) >= 3:
+            item["last_name"] = split[0].strip()
+            item["first_name"] = split[1].strip()
+            data["persons"].append(item)
+        else:
+            item["name"] = split[0].strip()
+            data["companies"].append(item)
+
+    return data
 
 
 SCRAPER_MAP = {
@@ -238,9 +248,7 @@ def scrape_company(name):
     # return data
 
 HRC_TESTS = [
-"https://www.rc2.vd.ch/registres/hrcintapp-pub/companyReport.action?companyOfrcId13=CH-550-1026964-4&ofrcLanguage=2",
-"https://www.rc2.vd.ch/registres/hrcintapp-pub/companyReport.action?companyOfrcId13=CH-550-1156917-1&ofrcLanguage=2"
+"https://www.rc2.vd.ch/registres/hrcintapp-pub/companyReport.action?companyOfrcId13=CH-550-1026964-4&rad=Y&ofrcLanguage=2",
+"https://www.rc2.vd.ch/registres/hrcintapp-pub/companyReport.action?companyOfrcId13=CH-550-1156917-1&rad=Y&ofrcLanguage=2"
 ]
 
-for t in HRC_TESTS:
-    print(HRC_TESTS(t))
