@@ -2,6 +2,8 @@ import pandas as pd
 import os
 import concurrent.futures
 
+from .zefix_scraper import zefix_search_raw, zefix_search, scrape_company
+
 def async_series_lookup(f, input_series, number_parallel_tasks=None):
     """
     Asynchronous lookup for Pandas Series
