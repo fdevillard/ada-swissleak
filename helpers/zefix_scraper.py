@@ -1,5 +1,6 @@
 import time
 from lxml import html, etree
+from lxml.html.clean import clean_html
 import requests
 
 SEARCH_URL = "http://zefix.ch/WebServices/Zefix/Zefix.asmx/SearchFirm"
@@ -249,17 +250,74 @@ def scrape_company(name):
 
     return company_data
 
+def zefix_multiple_search(name):
+    """
+    Parse all the different entries of a company. Equivalent to `zefix_search`
+    but parses all the findings (not only the first one, Zefix being not very
+    reliable).
+    """
 
-    # follow link to cantonal registry
+    content = zefix_search_raw(name)
+    if content is None:
+        return []
 
-    # call parser for relevant cantonal registry
+    tree = html.fromstring(content)
 
-    # return data
+    # Parse company names (text in bold between '<hr>')
+    after_first = tree.xpath("//hr[1]/following-sibling::b")
+    before_last = tree.xpath("//hr[2]/preceding-sibling::b")
+    
+    intersect = set(after_first).intersection(set(before_last))
+    target_nodes = [n for n in after_first if (n in intersect)]
 
-HRC_TESTS = [
-"https://www.rc2.vd.ch/registres/hrcintapp-pub/companyReport.action?companyOfrcId13=CH-550-1026964-4&rad=Y&ofrcLanguage=2",
-"https://www.rc2.vd.ch/registres/hrcintapp-pub/companyReport.action?companyOfrcId13=CH-550-1156917-1&rad=Y&ofrcLanguage=2"
-]
+    names = [n.text for n in target_nodes]
+    
+    # Parse URLs to local register (ones with text as CHE*)
+    urls = [n.get('href') for n in tree.xpath("//a[@target='_blank']")
+             if n.text.startswith('CHE')]
+
+
+    # Parse cities (ones within a link torward '_top')
+    cities = tree.xpath("//a[@target='_top']/text()")
+
+    assert len(names) == len(urls) == len(cities)
+
+    # Merge together
+    result = []
+    for i in range(len(names)):
+        result.append({
+            'name': names[i],
+            'url': urls[i],
+            'city': cities[i],
+        })
+
+    return result
+    
+
+def get_company_detail(company_details):
+    """
+    Take a company representation - dict with key city, url and name - and parse
+    the data from the local registry.
+    """
+    company_data = None
+
+    for (pattern, function) in SCRAPER_MAP.items():
+        if pattern in company_details["url"]:
+            company_data = function(company_details["url"])
+
+    return company_data
+
+
 
 if __name__=="__main__":
-    scrape_chregister("http://be.chregister.ch/cr-portal/auszug/auszug.xhtml?uid=CHE-110.398.897")
+    import pprint
+    pp = pprint.PrettyPrinter(indent=4)
+    COMPANY = 'lombard odier'
+
+    findings = zefix_multiple_search(COMPANY)
+    pp.pprint(findings)
+
+    print()
+    print('Let see the details:')
+    for c in findings:
+        pp.pprint(get_company_detail(c))
