@@ -262,28 +262,62 @@ def zefix_multiple_search(name):
         return []
 
     tree = html.fromstring(content)
-    result = []
+
+    # Parse company names (text in bold between '<hr>')
+    after_first = tree.xpath("//hr[1]/following-sibling::b")
+    before_last = tree.xpath("//hr[2]/preceding-sibling::b")
     
-    node = tree.xpath("//a[@target='_blank']")[0]
-    for e in dir(node):
-        print(e)
+    intersect = set(after_first).intersection(set(before_last))
+    target_nodes = [n for n in after_first if (n in intersect)]
 
-    print()
-    print(node.get('href'))
-    print(node.text)
-
+    names = [n.text for n in target_nodes]
+    
+    # Parse URLs to local register (ones with text as CHE*)
     urls = [n.get('href') for n in tree.xpath("//a[@target='_blank']")
              if n.text.startswith('CHE')]
 
-    print(len(urls))
 
-    #print(len(tree.xpath("//hr/following::b[1]/text()")))
-    #print(len(tree.xpath("//a[@target='_blank']/@href")))
-    #print(len(tree.xpath("//a[@target='_top']/text()")))
+    # Parse cities (ones within a link torward '_top')
+    cities = tree.xpath("//a[@target='_top']/text()")
 
-def scrape_companies(name):
-    pass
+    assert len(names) == len(urls) == len(cities)
+
+    # Merge together
+    result = []
+    for i in range(len(names)):
+        result.append({
+            'name': names[i],
+            'url': urls[i],
+            'city': cities[i],
+        })
+
+    return result
+    
+
+def get_company_detail(company_details):
+    """
+    Take a company representation - dict with key city, url and name - and parse
+    the data from the local registry.
+    """
+    company_data = None
+
+    for (pattern, function) in SCRAPER_MAP.items():
+        if pattern in company_details["url"]:
+            company_data = function(company_details["url"])
+
+    return company_data
+
+
 
 if __name__=="__main__":
+    import pprint
+    pp = pprint.PrettyPrinter(indent=4)
     COMPANY = 'lombard odier'
-    zefix_multiple_search(COMPANY)
+
+    findings = zefix_multiple_search(COMPANY)
+    pp.pprint(findings)
+
+    print()
+    print('Let see the details:')
+    for c in findings:
+        pp.pprint(get_company_detail(c))
