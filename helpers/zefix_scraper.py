@@ -1,5 +1,6 @@
 import time
 from lxml import html, etree
+from lxml.html.clean import clean_html
 import requests
 
 SEARCH_URL = "http://zefix.ch/WebServices/Zefix/Zefix.asmx/SearchFirm"
@@ -261,9 +262,24 @@ def zefix_multiple_search(name):
         return []
 
     tree = html.fromstring(content)
+    result = []
+    
+    node = tree.xpath("//a[@target='_blank']")[0]
+    for e in dir(node):
+        print(e)
 
-    print(html.tostring(tree, prettyprint=True))
+    print()
+    print(node.get('href'))
+    print(node.text)
 
+    urls = [n.get('href') for n in tree.xpath("//a[@target='_blank']")
+             if n.text.startswith('CHE')]
+
+    print(len(urls))
+
+    #print(len(tree.xpath("//hr/following::b[1]/text()")))
+    #print(len(tree.xpath("//a[@target='_blank']/@href")))
+    #print(len(tree.xpath("//a[@target='_top']/text()")))
 
 def scrape_companies(name):
     pass
