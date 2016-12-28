@@ -249,17 +249,25 @@ def scrape_company(name):
 
     return company_data
 
+def zefix_multiple_search(name):
+    """
+    Parse all the different entries of a company. Equivalent to `zefix_search`
+    but parses all the findings (not only the first one, Zefix being not very
+    reliable).
+    """
 
-    # follow link to cantonal registry
+    content = zefix_search_raw(name)
+    if content is None:
+        return []
 
-    # call parser for relevant cantonal registry
+    tree = html.fromstring(content)
 
-    # return data
+    print(html.tostring(tree, prettyprint=True))
 
-HRC_TESTS = [
-"https://www.rc2.vd.ch/registres/hrcintapp-pub/companyReport.action?companyOfrcId13=CH-550-1026964-4&rad=Y&ofrcLanguage=2",
-"https://www.rc2.vd.ch/registres/hrcintapp-pub/companyReport.action?companyOfrcId13=CH-550-1156917-1&rad=Y&ofrcLanguage=2"
-]
+
+def scrape_companies(name):
+    pass
 
 if __name__=="__main__":
-    scrape_chregister("http://be.chregister.ch/cr-portal/auszug/auszug.xhtml?uid=CHE-110.398.897")
+    COMPANY = 'lombard odier'
+    zefix_multiple_search(COMPANY)
