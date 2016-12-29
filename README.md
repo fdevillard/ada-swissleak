@@ -113,5 +113,22 @@ Several deliverables:
 
 # V - Current progression
 
+ * Add new data sources:
+     * Federal Parliament list of interests scraped
+     * Zefix scraped (as well as the cantonal registries)
+     * Some tables about big Swiss companies in wikipedia have been scraped
+ * ... other datasources' scraping have been aborted:
+     * MoneyHouse: doesn't have an API and have scraping locks (efficient ones)
+       Furthermore, they're not willing to share an access with us
+     * OpenCorporates: too messy for our project
+     * Cantonal Parliament list of interests because too different between
+       different cantons (even some are handwritten)
+ * Language processing
+     * Extraction of canton from addresses present in the Panama Paper database
+     * Fuzzy name mapping (which can be used to disambiguating different
+       searchs). For example, Zefix gives a lot of different results, not all
+       are worth it. Thus, we've to select which ones are worth considering
+ * Data visualization of the Panama papers and how Switzerland is present in it
+
 # VI - Further work
 ** TODO **
