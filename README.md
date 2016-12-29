@@ -1,6 +1,12 @@
 # The Panama Papers Project
 The aim of this project is to explore the data from the Swiss leaks and the Panama papers with a focus on Switzerland. In the first part we will construct a geographical timelapse for Switzerland showing the evolution of different activities within the country, as in this [example](https://youtu.be/310-GYiitpM). In a second part, we will examine the presence of swiss politicians and big companies in the leaked data. We will complement the data from the leaks with additional information about these entities and attempt to highlight the most relevant networks in Switzerland.
 
+# 0 - Liability
+Published information has been collected carefully but no guarantee about its
+completeness, correctness or up-to-date nature is given. No liability is
+accepted for damage or loss incurred from any information obtained in this
+repository.
+
 # I - Introduction: "The biggest leak in the history of data journalism"
 <sup>Source: https://panamapapers.icij.org/about.html</sup>
 
@@ -48,16 +54,14 @@ with relationships as (using Cypher, the language used in Neo4j):
 The ICIJ data contains a lot of duplicates, but only a small part of which is connected by a "has a similar name or address" relatioship. Another issue is that the shareholder information is stored with the "Officer", where the officer can be the share holder of any number of Companies. If the shareholder information would be stored in the "is officer of - Shareholer" relationship instead, we would remove the ambiguities in the shareholder information ([_Source_](https://neo4j.com/blog/analyzing-panama-papers-neo4j/)).
  
 # III - Extending the data 
-## Domain: Switzerland
-
 There are several ways to extend and enrich the _Panama papers_ database. Unfortunately, we don't have access to big part of the data and metadata from the original leaks. On the other hand, one can look for other sources and make cross checks in order to complement the information at hand. This task is part of our project.
   
 In this project, we will focus on Switzerland. Due to the public interest, it is an obvious move to cover at least two groups of entities within Switzerland:
  
  * Politicians
- * Big coorporations
+ * Big corporations
  
-We have pre-scanned the web for sources on the above entities. For identifying and investigating links with swiss corporations, we will make use of
+The following is an overview of different datasources:
  
  * [moneyhouse](https://www.moneyhouse.ch/)
      * Has well structured data on a companie's
@@ -66,33 +70,28 @@ We have pre-scanned the web for sources on the above entities. For identifying a
          * managers 
          * signatories
      * More information can be purchased. We're looking for an access.
+     * They don't have an API for accessing their data in a convenient
+       way. Thus, we tried to parse their website, without success.
  * [opencorporates](https://opencorporates.com/)
      * The largest open database of companies in the world with 115.272.454 companies.
      * Has an open API.
+     * This source have some data but is very noisy. Since we're looking for
+       data about Switzerland, opencorporates is too general.       
  * [zefix](http://zefix.admin.ch/zfx-cgi/hrform.cgi/hraPage?alle_eintr=on&pers_sort=original&pers_num=0&language=4&col_width=366&amt=007)
       * Similar information content as money house
-      * Has an API, but looks to be not well documented (and in German)
+      * Has an API, but looks to be bad documented (and in German)
+      * Each results gives a link to a cantonal registry. However, Cantons are
+        sharing the same plateforms (three in total). For each company, we can
+        see who composes the board of the company. 
  * [wikipedia](https://en.wikipedia.org/wiki/List_of_Swiss_companies_by_revenue)
       * List of biggest swiss companies by revenue
-      
- We have also access to a list of former and active swiss politicians.
-          
- * https://www.parlament.ch/en/organe/national-council/members-national-council-a-z
- * https://www.parlament.ch/centers/documents/de/interessen-nr.pdf
- 
- Moreover, we have a list of their _declared interests_, in which politicians officially declare which companies they support.
-
-- https://www.parlament.ch/centers/documents/de/interessen-nr.pdf (National
-  Council)
-- https://www.parlament.ch/centers/documents/de/interessen-sr.pdf (Council of
-  States)
-
-The difficulty with the above information is that we have only found it in pdf
-format or in the [Parliament
-website](https://www.parlament.ch/en/ratsmitglieder?k=*). Both seem to be hard
-to parse:
-* PDF isn't easy to parse and not very reliable
-* The website is mainly javascript based (with a strange access to their backend)
+ * Politicians have to give their list of interests. This is true for the
+   federal parliament as well as for the cantonal ones.
+      * For the federal level, data are available online using [their
+        website](https://www.parlament.ch/en)
+      * For the cantonal level, data are available but in different formats
+        (even, sometimes, in a handwritten way...). Therefore, it's hard to
+        access these data
 
 ### Lobbying in Switzerland 
 We would like to investigate these official statements about politicians declared interests and try to identify their _non-declared_ interests. We keep in mind that political campaigns in Switzerland are privately funded.
@@ -112,8 +111,24 @@ Several deliverables:
 3. **16.12.2016**: Complementing the leaks with the acquired data and identifying the most relevant networks in Switzerland. 
 4. **30.12.2016**: Finalize the timelapse and the viz for the networks.
 
-# V - Liability
-Published information has been collected carefully but no guarantee about its
-completeness, correctness or up-to-date nature is given. No liability is
-accepted for damage or loss incurred from any information obtained in this
-repository.
+# V - Current progression
+
+ * Add new data sources:
+     * Federal Parliament list of interests scraped
+     * Zefix scraped (as well as the cantonal registries)
+     * Some tables about big Swiss companies in wikipedia have been scraped
+ * ... other datasources' scraping have been aborted:
+     * MoneyHouse: doesn't have an API and have scraping locks (efficient ones)
+       Furthermore, they're not willing to share an access with us
+     * OpenCorporates: too messy for our project
+     * Cantonal Parliament list of interests because too different between
+       different cantons (even some are handwritten)
+ * Language processing
+     * Extraction of canton from addresses present in the Panama Paper database
+     * Fuzzy name mapping (which can be used to disambiguating different
+       searchs). For example, Zefix gives a lot of different results, not all
+       are worth it. Thus, we've to select which ones are worth considering
+ * Data visualization of the Panama papers and how Switzerland is present in it
+
+# VI - Further work
+** TODO **

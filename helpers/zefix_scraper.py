@@ -2,6 +2,8 @@ import time
 from lxml import html, etree
 from lxml.html.clean import clean_html
 import requests
+from difflib import SequenceMatcher
+import language
 
 SEARCH_URL = "http://zefix.ch/WebServices/Zefix/Zefix.asmx/SearchFirm"
 
@@ -250,7 +252,7 @@ def scrape_company(name):
 
     return company_data
 
-def zefix_multiple_search(name):
+def zefix_multiple_search(name, with_similarity=True):
     """
     Parse all the different entries of a company. Equivalent to `zefix_search`
     but parses all the findings (not only the first one, Zefix being not very
@@ -285,14 +287,22 @@ def zefix_multiple_search(name):
     # Merge together
     result = []
     for i in range(len(names)):
-        result.append({
+        entry = {
             'name': names[i],
             'url': urls[i],
             'city': cities[i],
-        })
+        }
+
+        if with_similarity:
+            import language
+            entry['similarity'] = language.similarity(name, entry['name'])
+
+        result.append(entry)
+
+    if with_similarity:
+        result = list(sorted(result, key=lambda x: x['similarity'], reverse=True))
 
     return result
-    
 
 def get_company_detail(company_details):
     """
@@ -307,17 +317,11 @@ def get_company_detail(company_details):
 
     return company_data
 
-
-
 if __name__=="__main__":
     import pprint
     pp = pprint.PrettyPrinter(indent=4)
-    COMPANY = 'lombard odier'
+    COMPANY = 'FER'
 
     findings = zefix_multiple_search(COMPANY)
-    pp.pprint(findings)
-
-    print()
-    print('Let see the details:')
-    for c in findings:
-        pp.pprint(get_company_detail(c))
+    for e in findings:
+        print("{} ({:.2f}%)".format(e['name'], e['similarity'] * 100))
