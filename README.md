@@ -1,6 +1,12 @@
 # The Panama Papers Project
 The aim of this project is to explore the data from the Swiss leaks and the Panama papers with a focus on Switzerland. In the first part we will construct a geographical timelapse for Switzerland showing the evolution of different activities within the country, as in this [example](https://youtu.be/310-GYiitpM). In a second part, we will examine the presence of swiss politicians and big companies in the leaked data. We will complement the data from the leaks with additional information about these entities and attempt to highlight the most relevant networks in Switzerland.
 
+# 0 - Liability
+Published information has been collected carefully but no guarantee about its
+completeness, correctness or up-to-date nature is given. No liability is
+accepted for damage or loss incurred from any information obtained in this
+repository.
+
 # I - Introduction: "The biggest leak in the history of data journalism"
 <sup>Source: https://panamapapers.icij.org/about.html</sup>
 
@@ -53,7 +59,7 @@ There are several ways to extend and enrich the _Panama papers_ database. Unfort
 In this project, we will focus on Switzerland. Due to the public interest, it is an obvious move to cover at least two groups of entities within Switzerland:
  
  * Politicians
- * Big coorporations
+ * Big corporations
  
 The following is an overview of different datasources:
  
@@ -64,7 +70,7 @@ The following is an overview of different datasources:
          * managers 
          * signatories
      * More information can be purchased. We're looking for an access.
-     * They don't already have an API for accessing their data in a convenient
+     * They don't have an API for accessing their data in a convenient
        way. Thus, we tried to parse their website, without success.
  * [opencorporates](https://opencorporates.com/)
      * The largest open database of companies in the world with 115.272.454 companies.
@@ -73,7 +79,7 @@ The following is an overview of different datasources:
        data about Switzerland, opencorporates is too general.       
  * [zefix](http://zefix.admin.ch/zfx-cgi/hrform.cgi/hraPage?alle_eintr=on&pers_sort=original&pers_num=0&language=4&col_width=366&amt=007)
       * Similar information content as money house
-      * Has an API, but looks to be not well documented (and in German)
+      * Has an API, but looks to be bad documented (and in German)
       * Each results gives a link to a cantonal registry. However, Cantons are
         sharing the same plateforms (three in total). For each company, we can
         see who composes the board of the company. 
@@ -105,8 +111,7 @@ Several deliverables:
 3. **16.12.2016**: Complementing the leaks with the acquired data and identifying the most relevant networks in Switzerland. 
 4. **30.12.2016**: Finalize the timelapse and the viz for the networks.
 
-# V - Liability
-Published information has been collected carefully but no guarantee about its
-completeness, correctness or up-to-date nature is given. No liability is
-accepted for damage or loss incurred from any information obtained in this
-repository.
+# V - Current progression
+
+# VI - Further work
+** TODO **
