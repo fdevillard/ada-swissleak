@@ -3,7 +3,7 @@ import pandas as pd
 import json
 
 def filter_swiss(entities):
-    cond_1 = entities.country_codes == 'CHE'
+    cond_1 = entities.country_codes.str.contains('CHE')==True
     wrong_match = 'MIAMI|London|ANDORRA|Palace Yard Mews Bath|Delegate House 95 Queen|Co Kilkenny Ireland|CORPORATION TEST CLIENT|F - 74140 YVOIRE'
     cond_2 = entities.address.str.contains(wrong_match)==False
     return entities[cond_1 & cond_2]
