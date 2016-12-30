@@ -2,11 +2,14 @@ from nltk.tokenize import RegexpTokenizer
 import pandas as pd
 import json
 
-def filter_swiss(entities):
+def filter_swiss(entities, process_address=True):
     cond_1 = entities.country_codes.str.contains('CHE')==True
-    wrong_match = 'MIAMI|London|ANDORRA|Palace Yard Mews Bath|Delegate House 95 Queen|Co Kilkenny Ireland|CORPORATION TEST CLIENT|F - 74140 YVOIRE'
-    cond_2 = entities.address.str.contains(wrong_match)==False
-    return entities[cond_1 & cond_2]
+    if not process_address:
+        return entities[cond_1]
+    else:
+        wrong_match = 'MIAMI|London|ANDORRA|Palace Yard Mews Bath|Delegate House 95 Queen|Co Kilkenny Ireland|CORPORATION TEST CLIENT|F - 74140 YVOIRE'
+        cond_2 = entities.address.str.contains(wrong_match)==False
+        return entities[cond_1 & cond_2]
 
 
 def get_postal_codes(swiss_entities):
