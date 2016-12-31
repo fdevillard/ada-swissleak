@@ -1,0 +1,44 @@
+
+    <html>
+    <head>
+      <script type="text/javascript" src="../lib/vis/dist/vis.js"></script>
+      <link href="../lib/vis/dist/vis.css" rel="stylesheet" type="text/css">
+    </head>
+    <body>
+    <div id="5f0a3b78-319b-40fb-8f93-43c73d43d635"></div>
+    <script type="text/javascript">
+      var nodes = [{"label": "Benoit Francois Leleux", "group": "Officer", "title": "{'sourceID': 'Offshore Leaks', 'country_codes': 'CHE', 'name': 'Benoit Francois Leleux', 'countries': 'Switzerland', 'node_id': '24819', 'labels': ['Officer'], 'valid_until': 'The Offshore Leaks data is current through 2010'}", "id": "972876"}, {"label": "Wellesley Hills Associates, Inc.", "group": "Entity", "title": "{'sourceID': 'Offshore Leaks', 'jurisdiction': 'XXX', 'countries': 'British Virgin Islands;Switzerland', 'ibcRUC': '184911', 'node_id': '209913', 'address': \"Beno\u00eet F. Leleux S. Schmidheiny Professor of Entrepreneurship and Finance IMD - Int'l Institute for Mgmt Development 23 Chemin de Bellerive P.O. Box 915 CH-1001 Lausanne Switzerland\", 'company_type': 'Standard Company under IBC Act', 'incorporation_date': '08-MAY-1996', 'status': 'Active', 'jurisdiction_description': 'Undetermined', 'country_codes': 'VGB;CHE', 'name': 'Wellesley Hills Associates, Inc.', 'valid_until': 'The Offshore Leaks data is current through 2010', 'labels': ['Entity'], 'service_provider': 'Commonwealth Trust Limited'}", "id": "444836"}, {"label": "Beno\u00eet F. Leleux", "group": "Intermediary", "title": "{'sourceID': 'Offshore Leaks', 'country_codes': 'CHE', 'name': 'Beno\u00eet F. Leleux', 'countries': 'Switzerland', 'node_id': '298031', 'labels': ['Intermediary'], 'valid_until': 'The Offshore Leaks data is current through 2010'}", "id": "669270"}, {"label": "S. Schmidheiny Professor of Entrepreneurship and Finance IMD - Int'l Institute for Mgmt Development 23 Chemin de Bellerive P.O. Box 915 CH-1001 Lausanne Switzerland", "group": "Address", "title": "{'sourceID': 'Offshore Leaks', 'address': \"S. Schmidheiny Professor of Entrepreneurship and Finance IMD - Int'l Institute for Mgmt Development 23 Chemin de Bellerive P.O. Box 915 CH-1001 Lausanne Switzerland\", 'labels': ['Address'], 'country_codes': 'CHE', 'node_id': '285587', 'countries': 'Switzerland', 'valid_until': 'The Offshore Leaks data is current through 2010'}", "id": "149484"}, {"label": "Commonwealth Management Limited", "group": "Officer", "title": "{'sourceID': 'Offshore Leaks', 'labels': ['Officer'], 'country_codes': 'VIR', 'name': 'Commonwealth Management Limited', 'node_id': '24818', 'countries': 'U.S. Virgin Islands', 'valid_until': 'The Offshore Leaks data is current through 2010'}", "id": "972875"}, {"label": "Beno\u00eet F. Leleux S. Schmidheiny Professor of Entrepreneurship and Finance IMD - Int'l Institute for Mgmt Development 23 Chemin de Bellerive P.O. Box 915 CH-1001 Lausanne", "group": "Address", "title": "{'sourceID': 'Offshore Leaks', 'country_codes': 'CHE', 'countries': 'Switzerland', 'node_id': '261453', 'address': \"Beno\u00eet F. Leleux S. Schmidheiny Professor of Entrepreneurship and Finance IMD - Int'l Institute for Mgmt Development 23 Chemin de Bellerive P.O. Box 915 CH-1001 Lausanne\", 'labels': ['Address'], 'valid_until': 'The Offshore Leaks data is current through 2010'}", "id": "136576"}, {"label": "Veronique Marie Matthys", "group": "Officer", "title": "{'sourceID': 'Offshore Leaks', 'labels': ['Officer'], 'country_codes': 'BEL', 'name': 'Veronique Marie Matthys', 'node_id': '24823', 'countries': 'Belgium', 'valid_until': 'The Offshore Leaks data is current through 2010'}", "id": "972880"}, {"label": "Commonwealth Services Limited", "group": "Officer", "title": "{'sourceID': 'Offshore Leaks', 'labels': ['Officer'], 'country_codes': 'VIR', 'name': 'Commonwealth Services Limited', 'node_id': '20035', 'countries': 'U.S. Virgin Islands', 'valid_until': 'The Offshore Leaks data is current through 2010'}", "id": "971401"}];
+      var edges = [{"label": "DIRECTOR_OF", "to": "444836", "from": "972876"}, {"label": "SHAREHOLDER_OF", "to": "444836", "from": "972876"}, {"label": "INTERMEDIARY_OF", "to": "444836", "from": "669270"}, {"label": "REGISTERED_ADDRESS", "to": "149484", "from": "669270"}, {"label": "DIRECTOR_OF", "to": "444836", "from": "972875"}, {"label": "REGISTERED_ADDRESS", "to": "136576", "from": "444836"}, {"label": "SHAREHOLDER_OF", "to": "444836", "from": "972880"}, {"label": "DIRECTOR_OF", "to": "444836", "from": "971401"}];
+      var container = document.getElementById("5f0a3b78-319b-40fb-8f93-43c73d43d635");
+      var data = {
+        nodes: nodes,
+        edges: edges
+      };
+      var options = {
+          nodes: {
+              shape: 'dot',
+              size: 25,
+              font: {
+                  size: 14
+              }
+          },
+          edges: {
+              font: {
+                  size: 14,
+                  align: 'middle'
+              },
+              color: 'gray',
+              arrows: {
+                  to: {enabled: true, scaleFactor: 0.5}
+              },
+              smooth: {enabled: false}
+          },
+          physics: {
+              enabled: false
+          }
+      };
+      var network = new vis.Network(container, data, options);
+    </script>
+    </body>
+    </html>
+    

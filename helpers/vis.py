@@ -93,5 +93,9 @@ def draw(G, options=None, physics=False):
             if target not in nodes:
                 nodes.append(target)
             edges.append({'from':u_id,'to':v_id,'label':d['type']})
-
+    # If there's no edge, still plot the nodes:
+    for n_id,n in G.nodes(data=True):
+        node = get_info(n, n_id)
+        if node not in nodes:
+            nodes.append(node)
     return vis_network(nodes, edges, physics=physics)
