@@ -1,0 +1,44 @@
+
+    <html>
+    <head>
+      <script type="text/javascript" src="../lib/vis/dist/vis.js"></script>
+      <link href="../lib/vis/dist/vis.css" rel="stylesheet" type="text/css">
+    </head>
+    <body>
+    <div id="4e069784-1379-463c-bde8-873c7c5e4789"></div>
+    <script type="text/javascript">
+      var nodes = [{"label": "JAGUAR CAPITAL GROUP CORPORATION", "group": "Entity", "title": "{'inactivation_date': '06-NOV-2015', 'countries': 'Switzerland', 'name': 'JAGUAR CAPITAL GROUP CORPORATION', 'internal_id': '562107', 'service_provider': 'Mossack Fonseca', 'sourceID': 'Panama Papers', 'jurisdiction': 'BVI', 'original_name': 'JAGUAR CAPITAL GROUP CORPORATION', 'ibcRUC': '598585', 'node_id': '10104384', 'address': 'ETUDE MAURO POGGIA RUE BEAUMONT 11 1206 GENEVA SWITZERLAND', 'incorporation_date': '28-MAY-2004', 'status': 'Defaulted', 'jurisdiction_description': 'British Virgin Islands', 'country_codes': 'CHE', 'struck_off_date': '31-OCT-2015', 'valid_until': 'The Panama Papers data is current through 2015', 'labels': ['Entity']}", "id": "243233"}, {"label": "ETUDE MAURO POGGIA RUE BEAUMONT 11 1206 GENEVA SWITZERLAND", "group": "Address", "title": "{'sourceID': 'Panama Papers', 'countries': 'Switzerland', 'node_id': '14095956', 'address': 'ETUDE MAURO POGGIA RUE BEAUMONT 11 1206 GENEVA SWITZERLAND', 'country_codes': 'CHE', 'icij_id': 'B4F84F17C6DA160D5AFE1CAC5B2D25DD', 'valid_until': 'The Panama Papers  data is current through 2015', 'labels': ['Address']}", "id": "91538"}, {"label": "ETUDE MAURO POGGIA", "group": "Intermediary", "title": "{'sourceID': 'Panama Papers', 'labels': ['Intermediary'], 'name': 'ETUDE MAURO POGGIA', 'valid_until': 'The Panama Papers  data is current through 2015', 'internal_id': '90246', 'node_id': '11012186'}", "id": "658828"}, {"label": "TAMBROR MANAGEMENT LTD.", "group": "Entity", "title": "{'inactivation_date': '04-MAY-2015', 'countries': 'Switzerland', 'name': 'TAMBROR MANAGEMENT LTD.', 'internal_id': '545667', 'service_provider': 'Mossack Fonseca', 'sourceID': 'Panama Papers', 'jurisdiction': 'BVI', 'original_name': 'TAMBROR MANAGEMENT LTD.', 'ibcRUC': '470204', 'node_id': '10091190', 'address': 'ETUDE MAURO POGGIA RUE BEAUMONT 11 1206 GENEVA SWITZERLAND', 'incorporation_date': '20-NOV-2001', 'status': 'Defaulted', 'jurisdiction_description': 'British Virgin Islands', 'country_codes': 'CHE', 'struck_off_date': '30-APR-2015', 'valid_until': 'The Panama Papers data is current through 2015', 'labels': ['Entity']}", "id": "230576"}, {"label": "THE BEARER", "group": "Officer", "title": "{'sourceID': 'Panama Papers', 'labels': ['Officer'], 'icij_id': '06F7C2156191E6F4DE7B8E025F798446', 'name': 'THE BEARER', 'valid_until': 'The Panama Papers data is current through 2015', 'node_id': '12002623'}", "id": "895998"}, {"label": "Mauro Poggia", "group": "Officer", "title": "{'sourceID': 'Panama Papers', 'countries': 'Switzerland', 'node_id': '13000393', 'country_codes': 'CHE', 'icij_id': '0B1C0835FB7B81F78E90833F1C76D0BB', 'name': 'Mauro Poggia', 'valid_until': 'The Panama Papers data is current through 2015', 'labels': ['Officer']}", "id": "906581"}, {"label": "RUE BEAUMONT 11; 1206 Geneva; Switzerland", "group": "Address", "title": "{'sourceID': 'Panama Papers', 'address': 'RUE BEAUMONT 11; 1206 Geneva; Switzerland', 'labels': ['Address'], 'icij_id': 'FF4607D9F06AAD7088FA85926394F177', 'country_codes': 'CHE', 'node_id': '14089908', 'countries': 'Switzerland', 'valid_until': 'The Panama Papers  data is current through 2015'}", "id": "89383"}, {"label": "THE BEARER", "group": "Officer", "title": "{'sourceID': 'Panama Papers', 'labels': ['Officer'], 'icij_id': '6BD3C71EF748F85012C763F1E1F646F6', 'name': 'THE BEARER', 'valid_until': 'The Panama Papers data is current through 2015', 'node_id': '12013756'}", "id": "682061"}];
+      var edges = [{"label": "REGISTERED_ADDRESS", "to": "91538", "from": "243233"}, {"label": "INTERMEDIARY_OF", "to": "243233", "from": "658828"}, {"label": "INTERMEDIARY_OF", "to": "230576", "from": "658828"}, {"label": "SHAREHOLDER_OF", "to": "230576", "from": "895998"}, {"label": "BENEFICIARY_OF", "to": "243233", "from": "906581"}, {"label": "REGISTERED_ADDRESS", "to": "89383", "from": "906581"}, {"label": "SHAREHOLDER_OF", "to": "243233", "from": "682061"}, {"label": "REGISTERED_ADDRESS", "to": "91538", "from": "230576"}];
+      var container = document.getElementById("4e069784-1379-463c-bde8-873c7c5e4789");
+      var data = {
+        nodes: nodes,
+        edges: edges
+      };
+      var options = {
+          nodes: {
+              shape: 'dot',
+              size: 25,
+              font: {
+                  size: 14
+              }
+          },
+          edges: {
+              font: {
+                  size: 14,
+                  align: 'middle'
+              },
+              color: 'gray',
+              arrows: {
+                  to: {enabled: true, scaleFactor: 0.5}
+              },
+              smooth: {enabled: false}
+          },
+          physics: {
+              enabled: false
+          }
+      };
+      var network = new vis.Network(container, data, options);
+    </script>
+    </body>
+    </html>
+    
