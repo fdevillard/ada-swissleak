@@ -1,0 +1,3 @@
+[submodule "website"]
+	path = ada-swissleak-website
+	url = https://github.com/fdevillard/ada-swissleak-website.git
