@@ -3,7 +3,7 @@ from lxml import html, etree
 from lxml.html.clean import clean_html
 import requests
 from difflib import SequenceMatcher
-import language
+#import language
 
 SEARCH_URL = "http://zefix.ch/WebServices/Zefix/Zefix.asmx/SearchFirm"
 
