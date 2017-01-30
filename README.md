@@ -53,7 +53,7 @@ with relationships as (using Cypher, the language used in Neo4j):
 
 The ICIJ data contains a lot of duplicates, but only a small part of which is connected by a "has a similar name or address" relatioship. Another issue is that the shareholder information is stored with the "Officer", where the officer can be the share holder of any number of Companies. If the shareholder information would be stored in the "is officer of - Shareholer" relationship instead, we would remove the ambiguities in the shareholder information ([_Source_](https://neo4j.com/blog/analyzing-panama-papers-neo4j/)).
  
-# III - Extending the data 
+# III - Augmenting the data 
 There are several ways to extend and enrich the _Panama papers_ database. Unfortunately, we don't have access to big part of the data and metadata from the original leaks. On the other hand, one can look for other sources and make cross checks in order to complement the information at hand. This task is part of our project.
   
 In this project, we will focus on Switzerland. Due to the public interest, it is an obvious move to cover at least two groups of entities within Switzerland:
@@ -61,8 +61,32 @@ In this project, we will focus on Switzerland. Due to the public interest, it is
  * Politicians
  * Big corporations
  
-The following is an overview of different datasources:
+The following is an overview of different datasources that we used:
  
+ * [zefix](http://zefix.admin.ch/zfx-cgi/hrform.cgi/hraPage?alle_eintr=on&pers_sort=original&pers_num=0&language=4&col_width=366&amt=007)
+      * Commercial register for the legal entities in Switzerland.
+      * Has an API, but bad documented at the time of writing (and in German)
+      * Each results gives a link to a cantonal registry. However, Cantons are
+        sharing the same plateforms (three in total). For each company, we can
+        see who composes the board of the company. 
+      * A parser for Zefix and the cantonal registries was written. This allows
+        to obtain different information about companies such that the federal
+        identification number and the composition of the board
+ * [wikipedia](https://en.wikipedia.org/wiki/List_of_Swiss_companies_by_revenue)
+      * List of biggest swiss companies by revenue
+      * A parser for Wikipedia's table was written
+ * Politicians have to give their list of interests. This is true for the
+   federal parliament as well as for the cantonal ones.
+      * For the federal level, data are available online using [their
+        website](https://www.parlament.ch/en)
+      * For the cantonal level, data are available but in different formats
+        (even, sometimes, in a handwritten way...). Therefore, it's hard to
+        access these data
+      * The list of interests for parliamentaries at the federal level and the
+        canton of Geneva have been parsed, not for the other cantons (due to
+        different formats). This can be source of biaised if not used well.
+
+Furthermore, the following are considered sources but not used at the end:
  * [moneyhouse](https://www.moneyhouse.ch/)
      * Has well structured data on a companie's
          * Nominal capital
@@ -77,31 +101,6 @@ The following is an overview of different datasources:
      * Has an open API.
      * This source have some data but is very noisy. Since we're looking for
        data about Switzerland, opencorporates is too general.       
- * [zefix](http://zefix.admin.ch/zfx-cgi/hrform.cgi/hraPage?alle_eintr=on&pers_sort=original&pers_num=0&language=4&col_width=366&amt=007)
-      * Similar information content as money house
-      * Has an API, but looks to be bad documented (and in German)
-      * Each results gives a link to a cantonal registry. However, Cantons are
-        sharing the same plateforms (three in total). For each company, we can
-        see who composes the board of the company. 
- * [wikipedia](https://en.wikipedia.org/wiki/List_of_Swiss_companies_by_revenue)
-      * List of biggest swiss companies by revenue
- * Politicians have to give their list of interests. This is true for the
-   federal parliament as well as for the cantonal ones.
-      * For the federal level, data are available online using [their
-        website](https://www.parlament.ch/en)
-      * For the cantonal level, data are available but in different formats
-        (even, sometimes, in a handwritten way...). Therefore, it's hard to
-        access these data
-
-### Lobbying in Switzerland 
-We would like to investigate these official statements about politicians declared interests and try to identify their _non-declared_ interests. We keep in mind that political campaigns in Switzerland are privately funded.
-   
-It is expected that these subgroups, i.e. politicians and big companies, have intersections which will naturally be highlighted. We will investigate links among people/companies based in Switzerland and those between elements outside Switzerland, whenever we consider it relevant.
-
-One of the foreseeable achievements will be to reveal the networks in a similar fashion as it has been done in this example, for the Aliyev family in Azerbaijan: 
-
-<img src="https://s3.amazonaws.com/dev.assets.neo4j.com/wp-content/uploads/20160408103432/azerbaijan-president-linkurious-fraud-ring.png" width=400>
-
 
 # IV - Deliverables and timeplan
 Several deliverables:
@@ -110,25 +109,64 @@ Several deliverables:
 2. **02.12.2016**: First midterm check of the timelapse and the data acquisition/cleaning for politicians and big companies.
 3. **16.12.2016**: Complementing the leaks with the acquired data and identifying the most relevant networks in Switzerland. 
 4. **30.12.2016**: Finalize the timelapse and the viz for the networks.
+5. **31.01.2017**: Final deadline and presentation. Thus, creation of
+presentation and a website.
 
-# V - Current progression
+# V - Delivered
 
- * Add new data sources:
-     * Federal Parliament list of interests scraped
-     * Zefix scraped (as well as the cantonal registries)
-     * Some tables about big Swiss companies in wikipedia have been scraped
- * ... other datasources' scraping have been aborted:
-     * MoneyHouse: doesn't have an API and have scraping locks (efficient ones)
-       Furthermore, they're not willing to share an access with us
-     * OpenCorporates: too messy for our project
-     * Cantonal Parliament list of interests because too different between
-       different cantons (even some are handwritten)
- * Language processing
-     * Extraction of canton from addresses present in the Panama Paper database
-     * Fuzzy name mapping (which can be used to disambiguating different
-       searchs). For example, Zefix gives a lot of different results, not all
-       are worth it. Thus, we've to select which ones are worth considering
- * Data visualization of the Panama papers and how Switzerland is present in it
+## 0. An overview of Switzerland in the Panama Papers
+Notebook describing differents results about the Panama Papers and the
+Switzerland. Rough analysis of the CSV files from the ICIJ data and especially
+the location of the different entries.
+
+As we can see, Switzerland is well represented in the data. 
+
+## 1. Compile parliament members and their interests
+Import parliamentaries' lists of interests (federal and canton of Geneva
+levels) and group the data in well formatted Dataframe.
+
+The data is then stored in `data/all_interests.json`.
+
+## 2. Clean interests list
+Data from our data sources are dirty. This notebook is an attempt to improve the
+matching between two different data sources. In this one, we focus on the
+parliamentaries list of interests and Zefix lookup.
+
+A text processing pipeline is created in order to improve the number of lookups
+in Zefix.
+
+Different functions have been moved to `helpers/language.py` in order to provide
+a default pipeline for text processing or ranking the findings (tested mainly on
+Zefix results).
+
+## 3. Augment data with Zefix 
+Augments the data obtained from the list of interests of the politicians with
+the board members of the companies, using Zefix. 
+
+The set-up the possibility check link of second degree between a politician and
+an entry in the Panama Paper. 
+
+## 4. Lookup politicians and their interests in the Panama Papers
+This part focus on looking for politicians in the Panama papers data. Both the
+politicians directly and second degree links (the ones being in the same board
+as a politician) are searched. 
+
+Some politicians are found, and several wrong positive as well (for example
+people having a same same). 
+
+## 5. Wikipedia scraping
+** TODO (or rename it without the 5., since not used in analysis) **
+
+## 6. More visualization
+Notebook that generates other visualizations about the data like a world map,
+plot per canton, and map illustrating all entities at a cantonal level.
+
+## Other 
+ * Scraping of Zefix (in `helpers/zefix_scraper.py`) allows to scrape Zefix (the
+   commercial register). It offers an alternative tool than Moneyhouse (which is
+   commecrial and doesn't provide any API at the moment).
+ * Parsing of Wikipedia table
+ * Different examples of how to use Neo4J using Jupyter notebooks
 
 # VI - Further work
 ** TODO **
