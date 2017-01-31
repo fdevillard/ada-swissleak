@@ -154,10 +154,7 @@ as a politician) are searched.
 Some politicians are found, and several wrong positive as well (for example
 people having a same same). 
 
-## 5. Wikipedia scraping
-** TODO (or rename it without the 5., since not used in analysis) **
-
-## 6. More visualization
+## 5. More visualization
 Notebook that generates other visualizations about the data like a world map,
 plot per canton, and map illustrating all entities at a cantonal level.
 
