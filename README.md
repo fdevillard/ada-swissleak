@@ -1,5 +1,10 @@
 # The Panama Papers Project
-The aim of this project is to explore the data from the Swiss leaks and the Panama papers with a focus on Switzerland. In the first part we will construct a geographical timelapse for Switzerland showing the evolution of different activities within the country, as in this [example](https://youtu.be/310-GYiitpM). In a second part, we will examine the presence of swiss politicians and big companies in the leaked data. We will complement the data from the leaks with additional information about these entities and attempt to highlight the most relevant networks in Switzerland.
+The aim of this project is to explore the data from the Swiss leaks and the Panama papers with a focus on Switzerland. In the first part we will construct a geographical timelapse for Switzerland showing the evolution of different activities within the country. In a second part, we will examine the presence of swiss politicians and big companies in the leaked data. We will complement the data from the leaks with additional information about these entities and attempt to highlight the most relevant networks in Switzerland.
+
+Presentation of the project can be found here:
+
+- [Website](https://fdevillard.github.io/ada-swissleak-website/) from presenting some results
+- [Slides](https://docs.google.com/presentation/d/1N1xEphGOBkmNj8j0fFwERcmEGX81xgGT7XIZbesHHqE/edit?usp=sharing) for the presentation at the _Applied machine learning days_
 
 # 0 - Liability
 Published information has been collected carefully but no guarantee about its
