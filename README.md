@@ -3,8 +3,9 @@ The aim of this project is to explore the data from the Swiss leaks and the Pana
 
 Presentation of the project can be found here:
 
-- [Website](https://fdevillard.github.io/ada-swissleak-website/) from presenting some results
-- [Slides](https://docs.google.com/presentation/d/1N1xEphGOBkmNj8j0fFwERcmEGX81xgGT7XIZbesHHqE/edit?usp=sharing) for the presentation at the _Applied machine learning days_
+- [Website](https://fdevillard.github.io/ada-swissleak-website/), presents some results
+- [presentation/poster](https://docs.google.com/presentation/d/1N1xEphGOBkmNj8j0fFwERcmEGX81xgGT7XIZbesHHqE/edit?usp=sharing)
+  at the _Applied machine learning days_
 
 # 0 - Liability
 Published information has been collected carefully but no guarantee about its
